@@ -45,4 +45,4 @@ output_text = template.render(data_for_template)
 config = pdfkit.configuration(
     wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
 pdfkit.from_string(
-    output_text, './recipes/pdf_generated.pdf', configuration=config)
+    output_text, './recipes/' + ask_filename + '.pdf', configuration=config)
