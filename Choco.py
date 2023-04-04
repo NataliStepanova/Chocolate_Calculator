@@ -9,16 +9,22 @@ if proc_kakao + proc_maslo > 100:
     exit(0)
 
 odin_proc = (gr_vsego / 100)
-gr_kakao = proc_kakao * odin_proc
-gr_maslo = proc_maslo * odin_proc
-gr_pudra = gr_vsego - (gr_kakao + gr_maslo)
-fat_gr_kakao = gr_kakao / KAKAO_FAT_PERCENT
+gr_kakao = round(proc_kakao * odin_proc, 2)
+gr_maslo = round(proc_maslo * odin_proc, 2)
+gr_pudra = round(gr_vsego - (gr_kakao + gr_maslo), 2)
+fat_gr_kakao = round(gr_kakao / KAKAO_FAT_PERCENT, 2)
 # кол-во масла (gr_maslo) это и есть 100% жира
-fat_gr_vsego = fat_gr_kakao + gr_maslo
+
+fat_gr_vsego = round(fat_gr_kakao + gr_maslo, 2)
 print('Для приготовления ' + str(gr_vsego) + ' грамм шоколада понадобится: \n' + 'Вес какао-бобов ' + str(gr_kakao) + ' \n' +
       'Вес какао-масла ' + str(gr_maslo) + ' \n' + 'Вес сахарной пудры ' + str(gr_pudra))
 # массовую долю жира ограничить 2мя знаками
 print('Массовая доля жира: ' + str(fat_gr_vsego))
+
+ask_filename = input('Если вы хотите сохранить рецепт - задайте имя: ')
+if len(ask_filename) < 1:
+    print('Спасибо за использование нашей программы!')
+    exit(0)
 
 data_for_template = {
     'gr_vsego': str(gr_vsego),
