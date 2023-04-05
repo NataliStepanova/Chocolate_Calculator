@@ -1,5 +1,5 @@
 from Print_recipe import print_recipe_in_console
-from Create_pdf.Create_pdf import create_pdf
+from Write_recipe import write_recipe
 
 gr_vsego = int(input('Укажите вес готового продукта(гр) '))
 proc_kakao = int(input('Укажите % какао (гр) '))
@@ -19,9 +19,4 @@ fat_gr_vsego = round(fat_gr_kakao + gr_maslo, 2)
 
 print_recipe_in_console(gr_vsego, gr_kakao, gr_maslo, gr_pudra, fat_gr_vsego)
 
-ask_filename = input('Задайте имя, чтобы сохранить рецепт: ')
-if len(ask_filename) < 1:
-    print('Спасибо за использование нашей программы!')
-    exit(0)
-
-create_pdf(gr_vsego, gr_kakao, gr_maslo, gr_pudra, fat_gr_vsego, ask_filename)
+write_recipe(gr_vsego, gr_kakao, gr_maslo, gr_pudra, fat_gr_vsego)

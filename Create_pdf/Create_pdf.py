@@ -23,3 +23,5 @@ def create_pdf(vsego: int, kakao: int, maslo: int, pudra: int, fat_vsego: int, f
         wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
     pdfkit.from_string(
         output_text, './recipes/' + filename + '.pdf', configuration=config)
+
+    print('Ваш рецепт сохранен в ./recipes/' + filename + '.pdf')
