@@ -19,4 +19,5 @@ fat_gr_vsego = round(fat_gr_kakao + gr_maslo, 2)
 
 print_recipe_in_console(gr_vsego, gr_kakao, gr_maslo, gr_pudra, fat_gr_vsego)
 
-write_recipe(gr_vsego, gr_kakao, gr_maslo, gr_pudra, fat_gr_vsego)
+write_recipe({'vsego': gr_vsego, 'kakao': gr_kakao,
+             'maslo': gr_maslo, 'pudra': gr_pudra, 'fat_vsego': fat_gr_vsego})
