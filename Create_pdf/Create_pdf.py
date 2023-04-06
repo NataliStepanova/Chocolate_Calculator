@@ -2,13 +2,18 @@ import jinja2
 import pdfkit
 
 
-def create_pdf(vsego: int, kakao: int, maslo: int, pudra: int, fat_vsego: int, filename: str):
+def create_pdf(vsego: int, kakao: int, maslo: int, pudra: int, fat_vsego: int, ccal: int, prot: int, fat: int, carb: int, filename: str):
     data_for_template = {
         'vsego': str(vsego),
         'kakao': str(kakao),
         'maslo': str(maslo),
         'pudra': str(pudra),
-        'fat_vsego': str(fat_vsego)
+        'fat_vsego': str(fat_vsego),
+        'ccal': str(ccal),
+        'prot': str(prot),
+        'fat': str(fat),
+        'carb': str(carb)
+
     }
 
     template_loader = jinja2.FileSystemLoader('./')
