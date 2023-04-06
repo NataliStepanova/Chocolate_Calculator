@@ -6,3 +6,7 @@ def print_recipe_in_console(vsego, kakao, maslo, pudra, fatvsego, ccal, prot, fa
           ' грамм готового шоколада: ' + str(ccal) + ' Ккал')
     print('БЖУ на ' + str(vsego) +
           ' грамм: \nБелки: ' + str(prot) + ' грамм \nЖиры: ' + str(fat) + ' грамм \nУглеводы: ' + str(carb) + ' грамм')
+
+
+def print_recipe_in_window(vsego, kakao, maslo, pudra, fatvsego, ccal, prot, fat, carb):
+    return 'Для приготовления ' + str(vsego) + ' грамм шоколада понадобится: \nКакао-бобов: ' + str(kakao) + ' грамм \nКакао-масла: ' + str(maslo) + ' грамм \nСахарной пудры: ' + str(pudra) + ' грамм\n' + 'Массовая доля жира %: ' + str(fatvsego) + '\nОбщая калорийность на ' + str(vsego) + ' грамм готового шоколада: ' + str(ccal) + ' Ккал\nБЖУ на ' + str(vsego) + ' грамм: \nБелки: ' + str(prot) + ' грамм \nЖиры: ' + str(fat) + ' грамм \nУглеводы: ' + str(carb) + ' грамм'
