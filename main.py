@@ -4,31 +4,48 @@ from Ingredients import Kakao
 from Ingredients import Maslo
 from Ingredients import Pudra
 import PySimpleGUI as psg
-import psycopg2
-from Keys import DATABASE_PASSWORD
+from database import get_recipes
 
+recipes_from_db = get_recipes()
+recipes_for_layout = []
+for recipe in recipes_from_db:
+    recipes_for_layout.append([recipe[0], recipe[1]])
 psg.theme('DarkBrown5')
-layout1 = [[psg.Text('Укажите вес готового продукта (гр): '), psg.InputText(key='gr_vsego')],
-           [psg.Text('Укажите % какао (гр): '),
-           psg.InputText(key='proc_kakao')],
-           [psg.Text('Укажите % какао-масла (гр): '),
-           psg.InputText(key='proc_maslo')],
-           [psg.Text("", size=(60, 13), key='Recipe')],
-           [psg.Button('Посчитать!'), psg.Button('Отмена'),
-            psg.Button('Сохранить рецепт')],
-           [psg.Button('Подключиться к базе данных')]]
-# layout2 = [[psg.Text('Задайте имя, чтобы сохранить рецепт: ')],
-#            [psg.Text("", size=(60, 5), key='Recipe')],
-#            psg.Button('Сохранить')]
-
+layout1 = [
+    [psg.Listbox(recipes_for_layout, size=(95, 4),
+                 key='recipe_list', enable_events=True)],
+    [psg.Text('Укажите вес готового продукта (гр): '),
+     psg.InputText(key='gr_vsego')],
+    [psg.Text('Укажите % какао (гр): '),
+        psg.InputText(key='proc_kakao')],
+    [psg.Text('Укажите % какао-масла (гр): '),
+        psg.InputText(key='proc_maslo')],
+    [psg.Text("", size=(80, 13), key='Recipe')],
+    [psg.Button('Посчитать!'), psg.Button('Отмена'),
+        psg.Button('Сохранить рецепт в pdf')],
+    [psg.Button('Запомнить рецепт')]]
 window = psg.Window('Калькулятор шоколада', layout1)
 while True:
     event, values = window.read()
     if event == psg.WIN_CLOSED or event == 'Отмена':  # if user closes window or clicks cancel
         break
-    gr_vsego = int(values['gr_vsego'])
-    proc_kakao = int(values['proc_kakao'])
-    proc_maslo = int(values['proc_maslo'])
+    recipe_from_db = {'gr_vsego': 0, 'proc_kakao': 0, 'proc_maslo': 0}
+    if event == 'recipe_list':
+        selected_id = values['recipe_list'][0][0]
+        for recipe in recipes_from_db:
+            if recipe[0] == selected_id:
+                recipe_from_db['gr_vsego'] = int(recipe[2])
+                recipe_from_db['proc_kakao'] = int(recipe[3])
+                recipe_from_db['proc_maslo'] = int(recipe[4])
+                # print(recipe)
+                break
+    print(recipe_from_db)
+    # gr_vsego = int(values['gr_vsego'])
+    # proc_kakao = int(values['proc_kakao'])
+    # proc_maslo = int(values['proc_maslo'])
+    gr_vsego = recipe_from_db['gr_vsego']
+    proc_kakao = recipe_from_db['proc_kakao']
+    proc_maslo = recipe_from_db['proc_maslo']
     KAKAO_FAT_PERCENT = 53
     if proc_kakao + proc_maslo > 100:
         print('Уменьшите количество какао-масла ')
@@ -57,21 +74,13 @@ while True:
                                            fat_gr_vsego, common_ccal, common_prot, common_fat, common_carb)
     window['Recipe'].update(value=output_recipe)
 
-    if event == 'Сохранить рецепт':
+    if event == 'Сохранить рецепт в pdf':
         write_recipe({'vsego': gr_vsego, 'proc_kakao': proc_kakao, 'proc_maslo': proc_maslo, 'kakao': gr_kakao,
                       'maslo': gr_maslo, 'pudra': gr_pudra, 'fat_vsego': fat_gr_vsego, 'ccal': common_ccal, 'prot': common_prot, 'fat': common_fat, 'carb': common_carb})
         window.close()
-    if event == 'Подключиться к базе данных':
-        try:
-            conn = psycopg2.connect(
-                dbname='Chocolate', user='postgres', password=DATABASE_PASSWORD, port='5432')
-            cursor = conn.cursor()
-            cursor.execute('SELECT * FROM public."Recipes"')
-            data = cursor.fetchall()
-            print(data)
-            cursor.close()  # закрываем курсор
-            conn.close()  # закрываем соединение
-        except:
-            print('Соединение не установлено')
-
+    if event == 'Запомнить рецепт':
+        # cursor.execute(
+        #     'INSERT INTO recipes(Gramm_total, Kakao_percent, Maslo_percent) VALUES (' + str(gr_vsego) + ',' + str(proc_kakao) + ',' + str(proc_maslo) + ')')
+        # conn.commit()
+        print('To do bd request')
 window.close()
