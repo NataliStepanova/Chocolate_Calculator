@@ -5,6 +5,7 @@ from Ingredients import Maslo
 from Ingredients import Pudra
 import PySimpleGUI as psg
 from database import get_recipes, put_recipe
+from helpers import transform_recipe_to_listbox
 
 KAKAO_FAT_PERCENT = 53
 current_recipe = {
@@ -22,24 +23,26 @@ current_recipe = {
 }
 
 recipes_from_db = get_recipes()
-recipes_for_layout = []
-for recipe in recipes_from_db:
-    recipes_for_layout.append([recipe[0], recipe[1]])
+recipes_for_layout = transform_recipe_to_listbox(recipes_from_db)
 psg.theme('DarkBrown5')
-layout1 = [
-    [psg.Listbox(recipes_for_layout, size=(95, 4),
+layout = [
+    [psg.Listbox(recipes_for_layout, size=(75, 4),
                  key='recipe_list', enable_events=True)],
+    [psg.Text('Укажите имя рецепта: '),
+     psg.InputText(key='name')],
     [psg.Text('Укажите вес готового продукта (гр): '),
      psg.InputText(key='gr_vsego')],
     [psg.Text('Укажите % какао (гр): '),
         psg.InputText(key='proc_kakao')],
     [psg.Text('Укажите % какао-масла (гр): '),
         psg.InputText(key='proc_maslo')],
-    [psg.Text("", size=(80, 13), key='Recipe')],
-    [psg.Button('Посчитать!', key='Make'), psg.Button('Отмена'),
-        psg.Button('Сохранить рецепт в pdf')],
-    [psg.Button('Сохранить рецепт в базу данных', key='Save_to_db')]]
-window = psg.Window('Калькулятор шоколада', layout1)
+    [psg.Button('Посчитать!', key='Make')],
+    [psg.Text("", size=(75, 13), key='Recipe')],
+    [psg.Button('Сохранить рецепт в pdf'),
+     psg.Button(
+         'Сохранить рецепт в базу данных', key='Save_to_db'),
+     psg.Button('Отмена')]]
+window = psg.Window('Калькулятор шоколада', layout)
 
 
 def make_recipe(gr_vsego, proc_kakao, proc_maslo):
@@ -103,12 +106,11 @@ while True:
             values['proc_kakao']), int(values['proc_maslo']))
 
     if event == 'Сохранить рецепт в pdf':
-        write_recipe(current_recipe)
+        write_recipe(current_recipe, values['name'])
         window.close()
     if event == 'Save_to_db':
-        put_recipe(current_recipe)
-        # cursor.execute(
-        #     'INSERT INTO recipes(Gramm_total, Kakao_percent, Maslo_percent) VALUES (' + str(gr_vsego) + ',' + str(proc_kakao) + ',' + str(proc_maslo) + ')')
-        # conn.commit()
-        print('To do bd request')
+        put_recipe(current_recipe, values['name'])
+        recipes_from_db = get_recipes()
+        recipes_for_layout = transform_recipe_to_listbox(recipes_from_db)
+        window['recipe_list'].update(recipes_for_layout)
 window.close()

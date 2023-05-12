@@ -17,24 +17,26 @@ class type_sostav (TypedDict):
     carb: int
 
 
-def write_recipe(sostav: type_sostav):
-    ask_filename = input('Задайте имя, чтобы сохранить рецепт: ')
-    if len(ask_filename) < 1:
-        print('Спасибо за использование нашей программы!')
-        exit(0)
+def write_recipe(sostav: type_sostav, filename):
 
-    path = './recipes/' + ask_filename + '.pdf'
+    # ask_filename = input('Задайте имя, чтобы сохранить рецепт: ')
+    # if len(ask_filename) < 1:
+    #     print('Спасибо за использование нашей программы!')
+    #     exit(0)
+
+    path = './recipes/' + filename + '.pdf'
 
     is_file_exists = os.path.exists(path)
 
     if is_file_exists:
-        ask_rewrite = input('Такой файл существует - перезаписать? (Y/N)')
+        ask_rewrite = input(
+            'Такой файл существует - перезаписать? (Y/N)')
         if ask_rewrite == 'y' or ask_rewrite == 'yes' or ask_rewrite == 'Yes' or ask_rewrite == 'YES' or ask_rewrite == 'Да' or ask_rewrite == 'да' or ask_rewrite == 'Д' or ask_rewrite == 'д':
             create_pdf(sostav['vsego'], sostav['proc_kakao'], sostav['proc_maslo'], sostav['kakao'], sostav['maslo'],
-                       sostav['pudra'], sostav['fat_vsego'], sostav['ccal'], sostav['prot'], sostav['fat'], sostav['carb'], ask_filename)
+                       sostav['pudra'], sostav['fat_vsego'], sostav['ccal'], sostav['prot'], sostav['fat'], sostav['carb'], filename)
         else:
             write_recipe(sostav)
 
     else:
         create_pdf(sostav['vsego'], sostav['proc_kakao'], sostav['proc_maslo'], sostav['kakao'], sostav['maslo'],
-                   sostav['pudra'], sostav['fat_vsego'], sostav['ccal'], sostav['prot'], sostav['fat'], sostav['carb'], ask_filename)
+                   sostav['pudra'], sostav['fat_vsego'], sostav['ccal'], sostav['prot'], sostav['fat'], sostav['carb'], filename)
